@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="index.js"></script>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div>
+            <canvas id="canv" width="800" height="600"></canvas>
+        </div>
+        <div>
+            <button id="addBtn">Add 50 Points</button>
+        </div>
+    </body>
+    <script>
+        const width = 800;
+        const height = 600;
+
+        let ctx = document.getElementById('canv').getContext('2d'),
+            addBtn = document.getElementById('addBtn');
+
+        let root = makeTree(4, new AABB({x: 0, y: 0}, {x: width, y: height}));
+
+        function drawTree(tree) {
+            let { points, range } = tree;
+
+            // draw bound
+            ctx.strokeRect(range.topLeft.x, range.topLeft.y, 
+                            range.bottomRight.x - range.topLeft.x, range.bottomRight.y - range.topLeft.y);
+
+            // draw points
+            points.forEach(pt => {
+                ctx.fillRect(pt.x - 1, pt.y - 1, 2, 2);
+            })
+
+            tree.children.forEach(sub => {
+                drawTree(sub);
+            });
+        }
+
+        function getRandomPoints(count) {
+            let pts = [];
+
+            while(count > 0) {
+                let x = Math.floor(Math.random() * width);
+                let y = Math.floor(Math.random() * width);
+                pts.push({x, y});
+
+                count--;
+            }
+
+            console.log(pts);
+            return pts;
+        }
+
+        addBtn.addEventListener('click', () => {
+            getRandomPoints(50).forEach(pt => {
+                root.insert(pt);
+            });
+
+            ctx.clearRect(0, 0, width, height);
+            drawTree(root);
+        });
+    </script>
+</html>
