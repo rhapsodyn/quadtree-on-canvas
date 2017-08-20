@@ -34,7 +34,8 @@
 
             // draw points
             points.forEach(pt => {
-                ctx.fillRect(pt.x - 1, pt.y - 1, 2, 2);
+                let radius = 2;
+                ctx.fillRect(pt.x - radius, pt.y - radius, 2 * radius, 2 * radius);
             })
 
             tree.children.forEach(sub => {
@@ -53,7 +54,6 @@
                 count--;
             }
 
-            console.log(pts);
             return pts;
         }
 

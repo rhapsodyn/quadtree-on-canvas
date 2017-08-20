@@ -5,7 +5,9 @@ class QuadTree {
 
         this.points = [];
         // only four
-        this.children = []
+        this.children = [];
+        // only leaf can hold some points
+        this.isLeaf = true;
     }
 
     subdivide() {
@@ -24,17 +26,14 @@ class QuadTree {
         });
 
         this.points = [];
-    }
-
-    get isLeaf() {
-        return this.points.length !== 0;
+        this.isLeaf = false;
     }
 
     // TODO: optimize: find nearest then insert
     insert(point) {
         if (!this.range.contains(point)) return false;
 
-        if (this.points.length < this.capcity) {
+        if (this.isLeaf && this.points.length < this.capcity) {
             this.points.push(point);
             return true;
         }
